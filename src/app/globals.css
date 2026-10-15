@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/*
+  Themes: light (default) / dark, following the OS unless the user picks one (data-theme).
+  Accent: data-accent on <html> picks one of four brand hues; each has a light-mode and a dark-mode step.
+*/
+
+/* ---- accents ---- */
+:root, [data-accent="emerald"] { --a-l: #047857; --a-d: #10b981; }
+[data-accent="rose"]           { --a-l: #be123c; --a-d: #fb7185; }
+[data-accent="blue"]           { --a-l: #1d4ed8; --a-d: #60a5fa; }
+[data-accent="violet"]         { --a-l: #6d28d9; --a-d: #a78bfa; }
+
+/* ---- light ---- */
+:root {
+  color-scheme: light;
+  --background: #f6f7f5;
+  --surface: #ffffff;
+  --surface-2: #eff1ed;
+  --line: #e1e5de;
+  --fg: #0f1714;
+  --soft: #3d4a44;
+  --muted: #66746d;
+
+  --brand: var(--a-l);
+  --brand-ink: #ffffff;
+  --hover-mix: black;
+
+  --good: #15803d;
+  --bad: #dc2626;
+  --warn: #b45309;
+
+  --series: #2a78d6;
+  --grid: #e7eae4;
+  --zero: #c5ccc3;
+  --card-shadow: 0 1px 2px rgba(15, 23, 20, 0.05), 0 1px 1px rgba(15, 23, 20, 0.03);
+}
+
+/* ---- dark (OS preference, unless light is forced) ---- */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --background: #0a0e0d;
+    --surface: #121918;
+    --surface-2: #19221f;
+    --line: #232f2b;
+    --fg: #eef4f1;
+    --soft: #b7c5be;
+    --muted: #82948d;
+
+    --brand: var(--a-d);
+    --brand-ink: #06120c;
+    --hover-mix: white;
+
+    --good: #4ade80;
+    --bad: #f87171;
+    --warn: #fbbf24;
+
+    --series: #3987e5;
+    --grid: #1c2723;
+    --zero: #34443d;
+    --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+}
+
+/* ---- dark (explicit choice) ---- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0a0e0d;
+  --surface: #121918;
+  --surface-2: #19221f;
+  --line: #232f2b;
+  --fg: #eef4f1;
+  --soft: #b7c5be;
+  --muted: #82948d;
+
+  --brand: var(--a-d);
+  --brand-ink: #06120c;
+  --hover-mix: white;
+
+  --good: #4ade80;
+  --bad: #f87171;
+  --warn: #fbbf24;
+
+  --series: #3987e5;
+  --grid: #1c2723;
+  --zero: #34443d;
+  --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--fg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-soft: var(--soft);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-600: color-mix(in oklab, var(--brand) 86%, var(--hover-mix));
+  --color-brand-ink: var(--brand-ink);
+  --color-good: var(--good);
+  --color-bad: var(--bad);
+  --color-warn: var(--warn);
+  --color-series: var(--series);
+  --shadow-card: var(--card-shadow);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand) 35%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.scroll-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+:root[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
