@@ -6,5 +6,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  // Skip static assets and the generated icon routes (icon2, apple-icon) so they load for signed-out visitors.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon\\d*|apple-icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };
