@@ -4,13 +4,10 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { saveEntry } from "./actions";
 import { btnCls, btnGhostCls, Card, inputCls, labelCls } from "@/components/ui";
-import { ACTION_SUGGESTIONS, REASON_SUGGESTIONS, type Entry } from "@/lib/constants";
+import type { Entry } from "@/lib/constants";
 
-type Suggestions = { flowers: string[]; boxes: string[]; reasons: string[]; actions: string[] };
-
-const merge = (a: string[], b: string[]) => [...new Set([...a, ...b])];
-
-export function EntryForm({ entry, suggestions }: { entry?: Entry; suggestions: Suggestions }) {
+// The autocomplete <datalist>s (ids: flowers, boxes, reasons, actions) are rendered next to the form by <SuggestionLists />.
+export function EntryForm({ entry }: { entry?: Entry }) {
   const [state, action, pending] = useActionState(saveEntry, undefined);
 
   return (
@@ -58,10 +55,6 @@ export function EntryForm({ entry, suggestions }: { entry?: Entry; suggestions: 
             <textarea name="comment" rows={2} defaultValue={entry?.comment ?? ""} className={`${inputCls} mt-1.5`} />
           </label>
         </div>
-        <datalist id="flowers">{suggestions.flowers.map((v) => <option key={v} value={v} />)}</datalist>
-        <datalist id="boxes">{suggestions.boxes.map((v) => <option key={v} value={v} />)}</datalist>
-        <datalist id="reasons">{merge(REASON_SUGGESTIONS, suggestions.reasons).map((v) => <option key={v} value={v} />)}</datalist>
-        <datalist id="actions">{merge(ACTION_SUGGESTIONS, suggestions.actions).map((v) => <option key={v} value={v} />)}</datalist>
       </Card>
 
       {state?.error && <p role="alert" className="rounded-xl bg-bad/10 px-3.5 py-2.5 text-sm text-bad">{state.error}</p>}

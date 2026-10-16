@@ -1,16 +1,21 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { fetchEntry, fetchSuggestions } from "@/lib/entries";
+import { fetchEntry } from "@/lib/entries";
 import { PageHeader } from "@/components/ui";
 import { EntryForm } from "../../entry-form";
+import { SuggestionLists } from "../../suggestion-lists";
 
 export default async function EditEntryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [entry, suggestions] = await Promise.all([fetchEntry(id), fetchSuggestions()]);
+  const entry = await fetchEntry(id);
   if (!entry) notFound();
   return (
     <>
       <PageHeader title="Edit entry" subtitle={`${entry.flower} · ${entry.box}`} />
-      <EntryForm entry={entry} suggestions={suggestions} />
+      <EntryForm entry={entry} />
+      <Suspense>
+        <SuggestionLists />
+      </Suspense>
     </>
   );
 }
