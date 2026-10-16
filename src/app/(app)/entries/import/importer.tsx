@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { importEntries, type ImportRow } from "../actions";
 import { btnCls, Card, td, th } from "@/components/ui";
@@ -82,8 +82,12 @@ export function Importer() {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ ok?: string; error?: string }>({});
 
-  const { rows, error } = text.trim() ? toRows(text) : { rows: [] as ImportRow[], error: undefined };
-  const badDates = rows.filter((r) => r.date && !parseDate(r.date)).length;
+  // Parsing a big paste is slow, so only redo it when the text changes.
+  const { rows, error } = useMemo(
+    () => (text.trim() ? toRows(text) : { rows: [] as ImportRow[], error: undefined }),
+    [text],
+  );
+  const badDates = useMemo(() => rows.filter((r) => r.date && !parseDate(r.date)).length, [rows]);
 
   async function onFile(file: File | undefined) {
     if (file) setText(await file.text());
